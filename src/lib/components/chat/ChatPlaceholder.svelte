@@ -3,7 +3,7 @@
 	import { marked } from 'marked';
 	import DOMPurify from 'dompurify';
 
-	import { config, user } from '$lib/stores';
+	import { config } from '$lib/stores';
 	import { onMount, getContext } from 'svelte';
 
 	import { blur, fade } from 'svelte/transition';
@@ -19,6 +19,7 @@
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
 	import { getChatContext } from '$lib/components/chat/context';
+	import { ASSISTANT_MARK, welcomeCopy } from '$lib/theme/brand';
 
 	const { models: _models, temporary } = getChatContext();
 
@@ -36,6 +37,8 @@
 	let selectedModelName = '';
 	let selectedModelDescription = '';
 	let selectedSuggestionPrompts = [];
+
+	$: copy = welcomeCopy($i18n.language);
 
 	$: if (modelIds.length > 0) {
 		selectedModelIdx = models.length - 1;
@@ -63,8 +66,15 @@
 </script>
 
 {#key mounted}
-	<div class="m-auto w-full max-w-[58rem] px-8 lg:px-20">
-		<div class="flex justify-start">
+	<div class="m-auto w-full max-w-[58rem] px-8 lg:px-20 text-center flex flex-col items-center">
+		<img
+			src={ASSISTANT_MARK}
+			alt=""
+			class="mb-4 size-12 rounded-2xl"
+			draggable="false"
+			in:fade={{ duration: 200 }}
+		/>
+		<div class="flex justify-center">
 			<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
 				{#each models as model, modelIdx}
 					<button
@@ -117,54 +127,55 @@
 		{/if}
 
 		<div
-			class=" mt-2 mb-4 text-3xl text-gray-800 dark:text-gray-100 text-left flex items-center gap-4"
+			class="mt-2 mb-4 text-3xl text-gray-800 dark:text-gray-100 text-center flex flex-col items-center gap-1"
 		>
-			<div>
-				<h2 class=" capitalize line-clamp-1" in:fade={{ duration: 200 }}>
-					{#if selectedModelName}
-						{selectedModelName}
-					{:else}
-						{$i18n.t('Hello, {{name}}', { name: $user?.name })}
-					{/if}
-				</h2>
-
-				<div in:fade={{ duration: 200, delay: 200 }}>
-					{#if selectedModelDescription}
-						<div
-							class="mt-0.5 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3 markdown"
-						>
-							{@html DOMPurify.sanitize(
-								marked.parse(
-									sanitizeResponseContent(selectedModelDescription).replaceAll('\n', '<br>')
-								)
-							)}
-						</div>
-						{#if models[selectedModelIdx]?.info?.meta?.user && (!models[selectedModelIdx]?.info?.meta?.user.community || $config?.features.enable_community_sharing)}
-							<div class="mt-0.5 text-sm font-normal text-gray-400 dark:text-gray-500">
-								{$i18n.t('By')}
-								{#if models[selectedModelIdx]?.info?.meta?.user.community}
-									<a
-										href="https://openwebui.com/m/{models[selectedModelIdx]?.info?.meta?.user
-											.username}"
-										>{models[selectedModelIdx]?.info?.meta?.user.name
-											? models[selectedModelIdx]?.info?.meta?.user.name
-											: `@${models[selectedModelIdx]?.info?.meta?.user.username}`}</a
-									>
-								{:else}
-									{models[selectedModelIdx]?.info?.meta?.user.name}
-								{/if}
-							</div>
-						{/if}
-					{:else}
-						<div class=" text-gray-400 dark:text-gray-500 line-clamp-1 font-p">
-							{$i18n.t('How can I help you today?')}
-						</div>
-					{/if}
+			<h2 class="line-clamp-1" in:fade={{ duration: 200 }}>
+				{copy.greeting}
+			</h2>
+			{#if selectedModelName}
+				<div class="text-sm font-normal text-gray-500 dark:text-gray-400 line-clamp-1">
+					{selectedModelName}
 				</div>
+			{/if}
+
+			<div in:fade={{ duration: 200, delay: 200 }}>
+				{#if selectedModelDescription}
+					<div
+						class="mt-0.5 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3 markdown"
+					>
+						{@html DOMPurify.sanitize(
+							marked.parse(
+								sanitizeResponseContent(selectedModelDescription).replaceAll('\n', '<br>')
+							)
+						)}
+					</div>
+					{#if models[selectedModelIdx]?.info?.meta?.user && (!models[selectedModelIdx]?.info?.meta?.user.community || $config?.features.enable_community_sharing)}
+						<div class="mt-0.5 text-sm font-normal text-gray-400 dark:text-gray-500">
+							{$i18n.t('By')}
+							{#if models[selectedModelIdx]?.info?.meta?.user.community}
+								<a
+									href="https://openwebui.com/m/{models[selectedModelIdx]?.info?.meta?.user
+										.username}"
+									>{models[selectedModelIdx]?.info?.meta?.user.name
+										? models[selectedModelIdx]?.info?.meta?.user.name
+										: `@${models[selectedModelIdx]?.info?.meta?.user.username}`}</a
+								>
+							{:else}
+								{models[selectedModelIdx]?.info?.meta?.user.name}
+							{/if}
+						</div>
+					{/if}
+				{:else}
+					<div
+						class="mt-1 text-base font-normal text-gray-400 dark:text-gray-500 line-clamp-1"
+					>
+						{copy.subtitle}
+					</div>
+				{/if}
 			</div>
 		</div>
 
-		<div class=" w-full" in:fade={{ duration: 200, delay: 300 }}>
+		<div class="w-full dsh-suggestions" in:fade={{ duration: 200, delay: 300 }}>
 			<Suggestions
 				className="grid grid-cols-2"
 				suggestionPrompts={selectedSuggestionPrompts}

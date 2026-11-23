@@ -27,6 +27,8 @@
 	<Lock {className} {strokeWidth} />
 {:else if id === 'connections'}
 	<Link {className} {strokeWidth} />
+{:else if id === 'access'}
+	<Lock {className} {strokeWidth} />
 {:else if id === 'models'}
 	<svg
 		aria-hidden="true"

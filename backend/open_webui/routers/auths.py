@@ -125,6 +125,8 @@ ADMIN_CONFIG_KEYS = {
     'I18N': 'ui.i18n',
     'JWT_EXPIRES_IN': 'auth.jwt_expiry',
     'ENABLE_COMMUNITY_SHARING': 'ui.enable_community_sharing',
+    'ENABLE_ADMIN_KEY_SHARING': 'ui.admin_key_shared',
+    'ENABLE_FREE_CHAT': 'ui.free_chat_enabled',
     'ENABLE_MESSAGE_RATING': 'ui.enable_message_rating',
     'ENABLE_FOLDERS': 'folders.enable',
     'FOLDER_MAX_FILE_COUNT': 'folders.max_file_count',
@@ -1177,6 +1179,8 @@ class AdminConfig(MfaConfigForm):
     I18N: dict[str, dict[str, StrictStr]] | None = None
     JWT_EXPIRES_IN: str
     ENABLE_COMMUNITY_SHARING: bool
+    ENABLE_ADMIN_KEY_SHARING: bool = True
+    ENABLE_FREE_CHAT: bool = True
     ENABLE_MESSAGE_RATING: bool
     ENABLE_FOLDERS: bool
     FOLDER_MAX_FILE_COUNT: int | str | None = None

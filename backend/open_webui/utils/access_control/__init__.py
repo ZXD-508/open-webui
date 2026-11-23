@@ -10,6 +10,7 @@ from open_webui.models.access_grants import (
 )
 from open_webui.models.groups import Groups
 from open_webui.models.users import UserModel
+from open_webui.utils.access_policy import admin_key_shared_for_users
 from sqlalchemy.ext.asyncio import AsyncSession
 
 log = logging.getLogger(__name__)
@@ -384,6 +385,13 @@ async def check_model_access(
 
     if bypass_filter:
         return
+
+    if user.role != 'admin' and not await admin_key_shared_for_users():
+        log.warning(
+            'Model access denied: user_id=%r reason=admin_key_sharing_disabled',
+            user.id,
+        )
+        raise HTTPException(status_code=403, detail='Model not found')
 
     if model_info:
         # Enforce for every non-admin role (including pending); never fail open.

@@ -28,6 +28,7 @@
 	import MessageInput from './MessageInput.svelte';
 	import FolderPlaceholder from './Placeholder/FolderPlaceholder.svelte';
 	import { getChatContext } from '$lib/components/chat/context';
+	import { ASSISTANT_MARK, welcomeCopy } from '$lib/theme/brand';
 
 	const { models: _models, temporary } = getChatContext();
 
@@ -109,6 +110,7 @@
 	let selectedSuggestionPrompts = [];
 
 	$: models = selectedModels.map((id) => $_models.find((m) => m.id === id));
+	$: copy = welcomeCopy($i18n.language);
 	$: selectedModel = atSelectedModel ?? models[selectedModelIdx];
 	$: selectedModelName = resolveLocalizedModelName(selectedModel, $i18n.language);
 	$: selectedModelDescription =
@@ -189,7 +191,7 @@
 <div
 	class="w-full {$selectedFolder
 		? 'flex h-full min-h-0 flex-col overflow-hidden'
-		: 'm-auto max-w-[58rem] px-1 md:@3xl:px-20 translate-y-6 py-24'} text-center"
+		: 'm-auto max-w-[58rem] px-1 md:@3xl:px-20 py-10'} text-center"
 >
 	<!-- In a folder, temporary mode shows on the composer alone. -->
 	{#if $temporary && !$selectedFolder}
@@ -239,6 +241,13 @@
 			class="w-full shrink-0 text-3xl text-gray-800 dark:text-gray-100 text-center flex items-center gap-4"
 		>
 			<div class="w-full flex flex-col justify-center items-center">
+				<img
+					src={ASSISTANT_MARK}
+					alt=""
+					class="mb-4 size-12 rounded-2xl"
+					draggable="false"
+					in:fade={{ duration: 100 }}
+				/>
 				<div class="flex flex-row justify-center gap-2.5 @sm:gap-3 w-fit px-5 max-w-xl">
 					<div class="flex shrink-0 justify-center">
 						<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 100 }}>
@@ -277,25 +286,18 @@
 						</div>
 					</div>
 
-					<h2
-						class=" text-2xl @sm:text-2xl line-clamp-1 flex items-center"
-						in:fade={{ duration: 100 }}
-					>
+					<div class="flex flex-col items-center text-center">
+						<h2 class="text-2xl @sm:text-2xl line-clamp-1" in:fade={{ duration: 100 }}>
+							{copy.greeting}
+						</h2>
 						{#if selectedModelName}
-							<Tooltip
-								as="span"
-								content={selectedModelName}
-								placement="top"
-								className=" flex items-center "
+							<div
+								class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 line-clamp-1"
 							>
-								<span class="line-clamp-1">
-									{selectedModelName}
-								</span>
-							</Tooltip>
-						{:else}
-							{$i18n.t('Hello, {{name}}', { name: $user?.name })}
+								{selectedModelName}
+							</div>
 						{/if}
-					</h2>
+					</div>
 				</div>
 
 				<div class="flex mt-1 mb-2">
@@ -338,6 +340,12 @@
 									{/if}
 								</div>
 							{/if}
+						{:else}
+							<div
+								class="mt-0.5 text-sm font-normal text-gray-500 dark:text-gray-400 line-clamp-1"
+							>
+								{copy.subtitle}
+							</div>
 						{/if}
 					</div>
 				</div>
@@ -359,7 +367,7 @@
 			</div>
 		</div>
 
-		<div class="mx-auto max-w-2xl mt-2" in:fade={{ duration: 200, delay: 200 }}>
+		<div class="mx-auto max-w-2xl mt-2 dsh-suggestions" in:fade={{ duration: 200, delay: 200 }}>
 			<div class="mx-5">
 				<Suggestions suggestionPrompts={selectedSuggestionPrompts} inputValue={prompt} {onSelect} />
 			</div>

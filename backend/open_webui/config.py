@@ -2170,6 +2170,13 @@ ENABLE_ADMIN_ANALYTICS = os.getenv('ENABLE_ADMIN_ANALYTICS', 'True').lower() == 
 
 ENABLE_COMMUNITY_SHARING = os.getenv('ENABLE_COMMUNITY_SHARING', 'True').lower() == 'true'
 
+# Access policy: whether non-admin users may use the admin-configured model
+# connections (and therefore the admin's API key). Both switches must be on
+# for normal users to chat without their own key.
+ENABLE_ADMIN_KEY_SHARING = os.getenv('ENABLE_ADMIN_KEY_SHARING', 'True').lower() == 'true'
+
+ENABLE_FREE_CHAT = os.getenv('ENABLE_FREE_CHAT', 'True').lower() == 'true'
+
 ENABLE_MESSAGE_RATING = os.getenv('ENABLE_MESSAGE_RATING', 'True').lower() == 'true'
 
 ENABLE_USER_WEBHOOKS = os.getenv('ENABLE_USER_WEBHOOKS', 'False').lower() == 'true'
@@ -3299,6 +3306,8 @@ DEFAULT_CONFIG = {
     'evaluation.arena.models': EVALUATION_ARENA_MODELS,
     'webhook_url': WEBHOOK_URL,
     'ui.enable_community_sharing': ENABLE_COMMUNITY_SHARING,
+    'ui.admin_key_shared': ENABLE_ADMIN_KEY_SHARING,
+    'ui.free_chat_enabled': ENABLE_FREE_CHAT,
     'ui.enable_message_rating': ENABLE_MESSAGE_RATING,
     'ui.enable_user_webhooks': ENABLE_USER_WEBHOOKS,
     'ui.banners': WEBUI_BANNERS,

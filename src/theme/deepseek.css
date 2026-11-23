@@ -1,0 +1,228 @@
+/*
+ * DSH-THEME: DeepSeek/DSH-inspired visual language.
+ *
+ * Scope: colors, typography, radii and spacing only. Open WebUI branding
+ * (name, logo, favicon, footer) is intentionally left untouched.
+ * Imported last in src/routes/+layout.svelte so these rules win over the
+ * bundled Tailwind utilities without needing !important.
+ */
+
+:root,
+html.light {
+	--dsh-brand: #4d6bfe;
+	--dsh-brand-hover: #3d5af0;
+	--dsh-brand-soft: #eef2ff;
+	--dsh-brand-softer: #f5f7ff;
+	--dsh-bg: #ffffff;
+	--dsh-canvas: #f7f8fc;
+	--dsh-sidebar: #f7f8fc;
+	--dsh-border: #eef0f4;
+	--dsh-border-strong: #e3e7ef;
+	--dsh-text: #1f2329;
+	--dsh-text-secondary: #4b5563;
+	--dsh-text-muted: #6b7280;
+	--dsh-radius-composer: 24px;
+	--dsh-radius-bubble: 18px;
+	--dsh-radius-chip: 999px;
+	--dsh-radius-row: 10px;
+	--dsh-shadow-composer:
+		0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 28px rgba(16, 24, 40, 0.06);
+	--dsh-shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 8px rgba(16, 24, 40, 0.04);
+}
+
+html.dark {
+	--dsh-brand: #7c93ff;
+	--dsh-brand-hover: #93a5ff;
+	--dsh-brand-soft: #232a44;
+	--dsh-brand-softer: #1d2233;
+	--dsh-bg: #17181c;
+	--dsh-canvas: #101114;
+	--dsh-sidebar: #141519;
+	--dsh-border: #26282f;
+	--dsh-border-strong: #30333c;
+	--dsh-text: #e8eaed;
+	--dsh-text-secondary: #b4b9c2;
+	--dsh-text-muted: #8b919c;
+}
+
+/* ---------------------------------------------------------------- page */
+
+html.light body {
+	background: var(--dsh-bg);
+	color: var(--dsh-text);
+}
+
+html.dark body {
+	background: var(--dsh-bg);
+	color: var(--dsh-text);
+}
+
+/* ------------------------------------------------------------- sidebar */
+
+html.light #sidebar {
+	background: var(--dsh-sidebar);
+	border-inline-end-color: var(--dsh-border);
+}
+
+html.dark #sidebar {
+	background: var(--dsh-sidebar);
+	border-inline-end-color: var(--dsh-border);
+}
+
+html #sidebar .selected,
+html #sidebar a[aria-current='page'] {
+	background: var(--dsh-brand-soft);
+	color: var(--dsh-brand);
+	border-radius: var(--dsh-radius-row);
+	font-weight: 500;
+}
+
+html.light #sidebar-new-chat-button {
+	background: #fff;
+	border: 1px solid var(--dsh-border);
+	border-radius: 12px;
+	box-shadow: var(--dsh-shadow-card);
+	padding: 8px 10px;
+}
+
+html.light #sidebar-new-chat-button:hover {
+	background: var(--dsh-brand-softer);
+	border-color: #dbe3ff;
+}
+
+html #sidebar-new-chat-button svg {
+	color: var(--dsh-brand);
+}
+
+html #sidebar-webui-name {
+	color: var(--dsh-text);
+	font-weight: 600;
+	letter-spacing: -0.01em;
+}
+
+/* ------------------------------------------------------------ composer */
+
+html.light [data-composer-id] {
+	background: #fff;
+	border-radius: var(--dsh-radius-composer);
+	border-color: var(--dsh-border);
+	box-shadow: var(--dsh-shadow-composer);
+	backdrop-filter: none;
+}
+
+html.dark [data-composer-id] {
+	background: #1d1e24;
+	border-radius: var(--dsh-radius-composer);
+	border-color: var(--dsh-border);
+	box-shadow: var(--dsh-shadow-composer);
+	backdrop-filter: none;
+}
+
+[data-composer-id]:focus-within {
+	border-color: #c9d4ff;
+	box-shadow:
+		0 0 0 3px rgba(77, 107, 254, 0.1),
+		var(--dsh-shadow-composer);
+}
+
+[data-composer-id] button[type='submit'] {
+	background: var(--dsh-brand);
+	color: #fff;
+}
+
+[data-composer-id] button[type='submit']:hover {
+	background: var(--dsh-brand-hover);
+}
+
+[data-composer-id] button[type='submit']:disabled {
+	background: var(--dsh-border-strong);
+	color: #fff;
+}
+
+/* model selector pill inside the composer */
+[data-composer-id] button[id^='model-selector-'] > div {
+	background: var(--dsh-brand-softer);
+	color: var(--dsh-brand);
+	border-radius: var(--dsh-radius-chip);
+	padding: 4px 10px;
+}
+
+[data-composer-id] button[id^='model-selector-'] > div:hover {
+	background: var(--dsh-brand-soft);
+}
+
+/* ------------------------------------------------------------- messages */
+
+html.light .dsh-user-bubble {
+	background: var(--dsh-brand-soft);
+	border-radius: var(--dsh-radius-bubble);
+	padding: 10px 16px;
+	max-width: 80%;
+	color: var(--dsh-text);
+}
+
+html.dark .dsh-user-bubble {
+	background: #242b45;
+	border-radius: var(--dsh-radius-bubble);
+	padding: 10px 16px;
+	max-width: 80%;
+	color: var(--dsh-text);
+}
+
+html.light #response-message-model-name {
+	color: var(--dsh-text-secondary);
+	font-weight: 500;
+}
+
+html .assistant-message-profile-image {
+	border-radius: 999px;
+	box-shadow: 0 0 0 1px var(--dsh-border);
+}
+
+/* ---------------------------------------------------------- suggestions */
+
+.dsh-suggestions [role='list'] {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px;
+	height: auto;
+	max-height: none;
+}
+
+.dsh-suggestions [role='listitem'] button {
+	background: #fff;
+	border: 1px solid var(--dsh-border);
+	border-radius: var(--dsh-radius-chip);
+	padding: 8px 14px;
+	box-shadow: var(--dsh-shadow-card);
+}
+
+.dsh-suggestions [role='listitem'] button:hover {
+	background: var(--dsh-brand-softer);
+	border-color: #dbe3ff;
+}
+
+html.dark .dsh-suggestions [role='listitem'] button {
+	background: #1d1e24;
+}
+
+html.dark .dsh-suggestions [role='listitem'] button:hover {
+	background: var(--dsh-brand-softer);
+}
+
+/* --------------------------------------------------------------- focus */
+
+html :focus-visible:not(.ProseMirror):not([contenteditable='true']):not(input):not(textarea),
+html .focus-ring:focus-visible {
+	outline-color: var(--dsh-brand);
+}
+
+/* --------------------------------------------------------------- scroll */
+
+html.light * {
+	scrollbar-color: #d7dbe3 transparent;
+}
+
+html.dark * {
+	scrollbar-color: #3a3d46 transparent;
+}

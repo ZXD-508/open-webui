@@ -4856,5 +4856,13 @@
 	"YouTube": "YouTube",
 	"YouTube video player": "YouTube 视频播放器",
 	"Zoom in": "放大",
-	"Zoom out": "缩小"
+	"Zoom out": "缩小",
+	"Access & billing": "访问与计费",
+	"Admin API key": "管理员 API Key",
+	"Allow users to use the admin key": "允许普通用户使用管理员 Key",
+	"When on, normal users can use the model connections and API key configured here. When off, they can only use their own connections.": "开启后，普通用户可以使用这里配置的模型连接和 API Key；关闭后，普通用户只能使用自己添加的连接。",
+	"Free chat": "免费问答",
+	"When on, normal users can chat without entering their own key. When off, they must use their own key.": "开启后，普通用户不填写自己的 Key 也能聊天；关闭后，必须使用自己的 Key。",
+	"Normal users can chat for free using the admin key.": "普通用户当前可以免费使用管理员 Key 聊天。",
+	"Normal users must use their own key to chat.": "普通用户当前必须使用自己的 Key 才能聊天。"
 }

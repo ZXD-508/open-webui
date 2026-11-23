@@ -43,6 +43,7 @@
 	import AdminGeneral from '$lib/components/admin/Settings/General.svelte';
 	import AdminAuthentication from '$lib/components/admin/Settings/Authentication.svelte';
 	import AdminConnections from '$lib/components/admin/Settings/Connections.svelte';
+	import AdminAccess from '$lib/components/admin/Settings/Access.svelte';
 	import AdminModels from '$lib/components/admin/Settings/Models.svelte';
 	import AdminSubagents from '$lib/components/admin/Settings/Subagents.svelte';
 	import AdminEvaluations from '$lib/components/admin/Settings/Evaluations.svelte';
@@ -160,6 +161,7 @@
 		'admin:authentication': $i18n.t('System'),
 		'admin:interface': $i18n.t('System'),
 		'admin:connections': $i18n.t('AI'),
+		'admin:access': $i18n.t('AI'),
 		'admin:models': $i18n.t('AI'),
 		'admin:subagents': $i18n.t('AI'),
 		'admin:integrations': $i18n.t('Tools'),
@@ -279,6 +281,12 @@
 			titleKey: 'settings.admin.connections.title',
 			title: $i18n.t('settings.admin.connections.title'),
 			searchPrefixes: ['settings.admin.connections.']
+		},
+		{
+			id: 'admin:access',
+			titleKey: 'Access',
+			title: $i18n.t('Access'),
+			searchPrefixes: []
 		},
 		{
 			id: 'admin:models',
@@ -854,6 +862,8 @@
 						toast.success($i18n.t('Settings saved successfully!'));
 					}}
 				/>
+			{:else if selectedTab === 'admin:access'}
+				<AdminAccess saveHandler={adminConfigSaveHandler} />
 			{:else if selectedTab === 'admin:models'}
 				<AdminModels bind:tabState />
 			{:else if selectedTab === 'admin:subagents'}

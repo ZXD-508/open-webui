@@ -20,6 +20,7 @@ from open_webui.models.users import UserModel
 from open_webui.routers import ollama, openai
 from open_webui.socket.utils import RedisDict
 from open_webui.utils.access_control import has_access, has_base_model_access
+from open_webui.utils.access_policy import admin_key_shared_for_users
 from open_webui.utils.chat_variables import get_chat_variables_schema
 from open_webui.utils.json_codec import JSONCodec
 from open_webui.utils.plugin import (
@@ -536,6 +537,15 @@ async def check_model_access(user, model, model_info=None, db=None):
     if model.get('owner_id') is not None and model.get('owner_id') == getattr(user, 'id', None):
         # The caller's own connection, resolved from their settings.
         return
+
+    if getattr(user, 'role', None) != 'admin' and not await admin_key_shared_for_users():
+        log.warning(
+            'Model access denied: user_id=%r model_id=%r reason=admin_key_sharing_disabled',
+            getattr(user, 'id', None),
+            model.get('id'),
+        )
+        raise Exception('Model not found')
+
     if model.get('arena'):
         meta = model.get('info', {}).get('meta', {})
         access_grants = meta.get('access_grants', [])
@@ -600,6 +610,11 @@ async def check_model_access(user, model, model_info=None, db=None):
 
 
 async def get_filtered_models(models, user, db=None):
+    # When admin-key sharing is off, normal users only see their own direct
+    # connections. Their tether models are appended by the caller afterwards.
+    if user.role != 'admin' and not await admin_key_shared_for_users():
+        models = [model for model in models if model.get('owner_id') == user.id]
+
     # Filter out models that the user does not have access to
     if (
         user.role == 'user' or (user.role == 'admin' and not BYPASS_ADMIN_ACCESS_CONTROL)
