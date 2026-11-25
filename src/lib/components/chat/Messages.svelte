@@ -20,6 +20,7 @@
 	const i18n = getContext('i18n');
 
 	export let className = 'h-full flex pt-18';
+	export let redesignedHome = false;
 
 	export let chatId = '';
 	const { temporary } = getChatContext();
@@ -518,7 +519,13 @@
 
 <div class={className}>
 	{#if Object.keys(history?.messages ?? {}).length == 0 || (branchPointMessageId && history?.currentId === branchPointMessageId)}
-		<ChatPlaceholder modelIds={selectedModels} {atSelectedModel} {onSelect} />
+		<ChatPlaceholder
+			modelIds={selectedModels}
+			{atSelectedModel}
+			{onSelect}
+			{redesignedHome}
+			inputValue={prompt}
+		/>
 	{:else}
 		<div class="w-full pt-2">
 			{#key chatId}

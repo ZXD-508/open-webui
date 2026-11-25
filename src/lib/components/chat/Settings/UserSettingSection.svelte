@@ -4,7 +4,7 @@
 	export let className = '';
 </script>
 
-<section class="w-full {first ? '' : 'mt-4'} {className}">
+<section class="labfocus-setting-section w-full {first ? '' : 'mt-4'} {className}">
 	{#if title}
 		<h3 class="mb-2 text-xs text-gray-600 dark:text-gray-400">
 			{title}

@@ -267,7 +267,15 @@
 
 <div class="w-full h-dvh text-white relative" id="auth-page">
 	<div id="main-content" tabindex="-1" class="sr-only left-0 top-0"></div>
-	<div class="w-full h-full absolute top-0 left-0 bg-white dark:bg-black"></div>
+	<div class="labfocus-auth-backdrop" aria-hidden="true">
+		<img
+			src="{WEBUI_BASE_URL}/static/labfocus/fish-login.webp"
+			width="333"
+			height="347"
+			alt=""
+			draggable="false"
+		/>
+	</div>
 
 	<div class="w-full absolute top-0 left-0 right-0 h-8 drag-region" />
 
@@ -334,7 +342,7 @@
 								}}
 							>
 								<div class="mb-1">
-									<div class=" text-2xl font-normal">
+									<div class="text-2xl font-normal labfocus-auth-title">
 										{#if $config?.onboarding ?? false}
 											{$i18n.t(`Get started with {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
 										{:else if mode === 'ldap'}
@@ -357,7 +365,7 @@
 								</div>
 
 								{#if $config?.features.enable_login_form || $config?.features.enable_ldap || form}
-									<div class="flex flex-col mt-4">
+									<div class="flex flex-col mt-4 labfocus-auth-fields">
 										{#if mode === 'signup'}
 											<div class="mb-2">
 												<label
@@ -423,6 +431,8 @@
 												>{$i18n.t('Password')}</label
 											>
 											<SensitiveInput
+												outerClassName="labfocus-auth-password flex items-center"
+												showButtonClassName="labfocus-auth-password-toggle"
 												bind:value={password}
 												type="password"
 												id="password"
@@ -444,6 +454,8 @@
 													>{$i18n.t('Confirm Password')}</label
 												>
 												<SensitiveInput
+													outerClassName="labfocus-auth-password flex items-center"
+													showButtonClassName="labfocus-auth-password-toggle"
 													bind:value={confirmPassword}
 													type="password"
 													id="confirm-password"
@@ -714,3 +726,185 @@
 		{/if}
 	{/if}
 </div>
+
+<style>
+	/* A quiet background layer; never intercepts authentication controls. */
+	.labfocus-auth-backdrop {
+		position: fixed;
+		inset: 0;
+		overflow: hidden;
+		background: #f0f7ff;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.labfocus-auth-backdrop img {
+		position: absolute;
+		right: clamp(0px, 3vw, 56px);
+		bottom: 0;
+		width: min(48vw, 580px);
+		height: auto;
+		opacity: 0.16;
+		object-fit: contain;
+	}
+
+	:global(html.dark) .labfocus-auth-backdrop {
+		background: #101b2b;
+	}
+
+	:global(html.dark) .labfocus-auth-backdrop img {
+		opacity: 0.12;
+	}
+
+	/* The form is a readable surface above the translucent character. */
+	#auth-login-card {
+		width: 100%;
+		max-width: 448px;
+		padding: 34px 36px;
+		border: 1px solid #dce6f3;
+		border-radius: 24px;
+		background: rgb(255 255 255 / 94%);
+		box-shadow: 0 12px 40px rgb(51 82 128 / 8%);
+		color: #252a34;
+	}
+
+	.labfocus-auth-title {
+		font-size: 24px;
+		font-weight: 600;
+		line-height: 1.4;
+	}
+
+	.labfocus-auth-fields {
+		gap: 16px;
+		margin-top: 24px;
+	}
+
+	.labfocus-auth-fields > div {
+		margin: 0;
+	}
+
+	#auth-login-card :global(label:not(.sr-only)) {
+		margin-bottom: 7px;
+		color: #48566b;
+		font-size: 13px;
+		font-weight: 500;
+	}
+
+	#auth-login-card :global(input),
+	#auth-login-card :global(.labfocus-auth-password) {
+		min-width: 0;
+		min-height: 46px;
+		margin: 0;
+		padding: 11px 13px;
+		border: 1px solid #d5e0ee;
+		border-radius: 12px;
+		background: #ffffff;
+		color: #252a34;
+		font-size: 14px;
+		line-height: 22px;
+	}
+
+	#auth-login-card :global(input::placeholder) {
+		color: #78869a;
+	}
+
+	#auth-login-card :global(input:focus),
+	#auth-login-card :global(.labfocus-auth-password:focus-within) {
+		border-color: #6c94ca;
+		outline: none;
+		box-shadow: 0 0 0 3px rgb(65 107 175 / 12%);
+	}
+
+	#auth-login-card :global(.labfocus-auth-password input) {
+		min-height: 0;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	#auth-login-card :global(.labfocus-auth-password-toggle) {
+		min-width: 28px;
+		min-height: 28px;
+		padding: 4px;
+		color: #65758b;
+	}
+
+	#auth-login-card button[type='submit'] {
+		min-height: 46px;
+		border: 1px solid #416baf;
+		border-radius: 12px;
+		background: #416baf;
+		color: #ffffff;
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	#auth-login-card button[type='submit']:hover:not([aria-disabled='true']) {
+		border-color: #355c9c;
+		background: #355c9c;
+	}
+
+	#auth-login-card button[type='button'].underline {
+		color: #355c9c;
+		text-underline-offset: 3px;
+	}
+
+	#auth-login-card :global(button:focus-visible) {
+		outline: 2px solid #416baf;
+		outline-offset: 3px;
+	}
+
+	:global(html.dark) #auth-login-card {
+		border-color: #31435d;
+		background: rgb(23 36 55 / 96%);
+		box-shadow: 0 12px 40px rgb(0 0 0 / 18%);
+		color: #e8eef7;
+	}
+
+	:global(html.dark) #auth-login-card :global(label:not(.sr-only)) {
+		color: #bcc9db;
+	}
+
+	:global(html.dark) #auth-login-card :global(input),
+	:global(html.dark) #auth-login-card :global(.labfocus-auth-password) {
+		border-color: #40536e;
+		background: #101e31;
+		color: #e8eef7;
+	}
+
+	:global(html.dark) #auth-login-card :global(input::placeholder) {
+		color: #9aaac0;
+	}
+
+	:global(html.dark) #auth-login-card :global(input:focus),
+	:global(html.dark) #auth-login-card :global(.labfocus-auth-password:focus-within) {
+		border-color: #85a9dc;
+		box-shadow: 0 0 0 3px rgb(133 169 220 / 14%);
+	}
+
+	:global(html.dark) #auth-login-card :global(.labfocus-auth-password input) {
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	:global(html.dark) #auth-login-card :global(.labfocus-auth-password-toggle),
+	:global(html.dark) #auth-login-card button[type='button'].underline {
+		color: #adcaff;
+	}
+
+	@media (max-width: 767px) {
+		#auth-login-card {
+			padding: 28px 24px;
+			border-radius: 20px;
+		}
+
+		.labfocus-auth-backdrop img {
+			right: -24px;
+			width: min(70vw, 300px);
+			opacity: 0.1;
+		}
+	}
+</style>

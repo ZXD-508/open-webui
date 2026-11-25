@@ -55,6 +55,7 @@
 	import '../app.css';
 	import 'tippy.js/dist/tippy.css';
 	import '../theme/deepseek.css';
+	import '../theme/labfocus.css';
 
 	import { getBackendConfig, getModels, getVersion } from '$lib/apis';
 	import { getSessionUser, updateUserTimezone, userSignOut } from '$lib/apis/auths';
@@ -67,7 +68,7 @@
 		removeTerminalConnection
 	} from '$lib/utils/connections';
 
-	import { COMMUNITY_ORIGINS, WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { APP_NAME, COMMUNITY_ORIGINS, WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
 	import { bestMatchingLanguage, cleanText, getUserTimezone, removeAllDetails } from '$lib/utils';
 	import { setTextScale } from '$lib/utils/text-scale';
 	import { initializeTether, renewTetherSession } from '$lib/utils/tether';
@@ -1120,7 +1121,7 @@
 			// visual, textual, symbolic identifiers, metadata, and surrounding UI.
 			// Do not alter, remove, obscure, or replace it except as LICENSE permits:
 			// https://docs.openwebui.com/license.
-			await WEBUI_NAME.set(backendConfig.name);
+			await WEBUI_NAME.set(APP_NAME);
 
 			if ($config) {
 				await setupSocket($config.features?.enable_websocket ?? true);

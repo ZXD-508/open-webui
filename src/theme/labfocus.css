@@ -1,0 +1,205 @@
+/* Approved chat-first homepage. Keep folder, embedded and dark-mode rules separate. */
+html.light #sidebar {
+	--dsh-sidebar: #f7f8fa;
+	background: var(--dsh-sidebar);
+}
+html.light #sidebar .sidebar-bg-gradient-to-b {
+	background-image: linear-gradient(to bottom, var(--dsh-sidebar), transparent 50%);
+}
+html.light #sidebar .sidebar-bg-gradient-to-t {
+	background-image: linear-gradient(to top, var(--dsh-sidebar), transparent 50%);
+}
+.labfocus-home-greeting {
+	margin: 0 0 27px;
+	font-size: clamp(25px, 2.2vw, 32px);
+	font-weight: 500;
+	line-height: 1.5;
+	color: var(--dsh-text);
+	text-wrap: balance;
+}
+.labfocus-home {
+	transform: translateY(-18px);
+}
+html.light :is(.labfocus-home, .labfocus-chat-placeholder, .labfocus-chat-composer) {
+	--dsh-brand: #416baf;
+	--dsh-brand-hover: #355c9c;
+	--dsh-brand-softer: #f6f8fb;
+	--dsh-text: #252a34;
+	--dsh-text-secondary: #68707d;
+	--dsh-border-strong: #e8ebf0;
+}
+html.light :is(.labfocus-home, .labfocus-chat-composer) [data-composer-id] {
+	border-color: #dfe4ed;
+	border-radius: 22px;
+	background: #fff;
+	box-shadow: 0 4px 24px #27365306;
+}
+html.light :is(.labfocus-home, .labfocus-chat-composer) [data-composer-id]:focus-within {
+	border-color: #a8bcd8;
+	box-shadow: 0 4px 24px #27365309;
+}
+:is(.labfocus-home, .labfocus-chat-composer) [data-composer-id] {
+	min-height: 80px;
+}
+html.light :is(.labfocus-home, .labfocus-chat-composer) [data-composer-id] button[type='submit'] {
+	background: #416baf;
+}
+html.light
+	:is(.labfocus-home, .labfocus-chat-composer)
+	[data-composer-id]
+	button[type='submit']:disabled {
+	background: #edf0f5;
+	color: #9ba6b7;
+}
+/* Settings presentation only: keep tabs, permissions and save handlers unchanged. */
+.labfocus-settings {
+	max-width: 1180px;
+	height: min(780px, calc(100dvh - 4rem));
+	border-radius: 22px;
+}
+html.light .modal:has(> .labfocus-settings) {
+	background: rgb(35 47 66 / 24%);
+}
+html.light .labfocus-settings {
+	border-color: #e3e8ef;
+	box-shadow: 0 20px 70px rgb(35 47 66 / 14%);
+	color: #252a34;
+}
+.labfocus-settings #settings-tabs-container {
+	padding: 12px 8px;
+}
+html.light .labfocus-settings #settings-tabs-container {
+	background: #f7f8fa;
+	border-color: #e8ebf0;
+}
+.labfocus-settings #settings-tabs-container [role='tab'] {
+	min-height: 36px;
+	height: auto;
+	gap: 9px;
+	padding: 8px 12px;
+	border-radius: 10px;
+	font-size: 13px;
+}
+html.light .labfocus-settings #settings-tabs-container [role='tab']:hover {
+	background: #edf1f6;
+	color: #252a34;
+}
+html.light .labfocus-settings #settings-tabs-container [aria-selected='true'] {
+	background: #e9eff9;
+	color: #355c9c;
+}
+.labfocus-settings-content {
+	padding: 26px 30px;
+}
+.labfocus-settings :is([id^='tab-'] > h2, [id^='tab-'] > div:first-child > h2:first-child) {
+	font-size: 20px;
+	line-height: 1.4;
+	font-weight: 600;
+	margin-bottom: 24px;
+}
+.labfocus-settings .labfocus-setting-section + .labfocus-setting-section {
+	margin-top: 26px;
+}
+.labfocus-settings .labfocus-setting-section > h3 {
+	margin-bottom: 14px;
+	font-size: 13px;
+	font-weight: 500;
+}
+.labfocus-settings .labfocus-setting-row {
+	min-height: 36px;
+	gap: 16px;
+}
+.labfocus-settings .labfocus-setting-row > label,
+.labfocus-settings .labfocus-setting-field > label {
+	font-size: 13px;
+	line-height: 1.6;
+}
+.labfocus-settings .labfocus-setting-row + p,
+.labfocus-settings .labfocus-setting-field > p {
+	font-size: 12px;
+	line-height: 1.7;
+}
+html.light .labfocus-settings .labfocus-setting-row + p,
+html.light .labfocus-settings .labfocus-setting-field > p {
+	color: #68707d;
+}
+.labfocus-settings select {
+	min-height: 34px;
+	border-radius: 9px;
+}
+html.light .labfocus-settings select {
+	background-color: #fff !important;
+	border-color: #dfe4ed;
+	color: #414b5c;
+}
+html.light .labfocus-settings textarea,
+html.light .labfocus-settings input:not([type='checkbox']):not([type='radio']):not([type='range']) {
+	color: #414b5c;
+	border-color: #dfe4ed;
+}
+html.light .labfocus-settings textarea {
+	background-color: #fafbfd;
+	border-radius: 10px;
+}
+.labfocus-settings :is(button[type='submit'], .labfocus-settings-save) {
+	min-height: 34px;
+	padding-inline: 16px;
+	border-radius: 10px;
+}
+html.light .labfocus-settings :is(button[type='submit'], .labfocus-settings-save) {
+	background: #416baf;
+	color: #fff;
+}
+html.light
+	.labfocus-settings
+	:is(button[type='submit'], .labfocus-settings-save):hover:not(:disabled) {
+	background: #355c9c;
+}
+.labfocus-settings :is(button, input, select, textarea):focus-visible {
+	outline: 2px solid var(--dsh-brand);
+	outline-offset: 3px;
+}
+@media (min-width: 768px) {
+	.labfocus-settings #settings-tabs-container {
+		width: 216px;
+	}
+}
+@media (max-width: 767px) {
+	.labfocus-settings {
+		border-radius: 18px;
+	}
+	.labfocus-settings #settings-tabs-container {
+		padding: 8px;
+	}
+	.labfocus-settings-content {
+		padding: 20px 18px;
+	}
+	.labfocus-settings :is([id^='tab-'] > h2, [id^='tab-'] > div:first-child > h2:first-child) {
+		font-size: 18px;
+		margin-bottom: 20px;
+	}
+	.labfocus-settings .labfocus-setting-row {
+		gap: 10px;
+	}
+}
+
+@media (max-width: 760px) {
+	.labfocus-home {
+		transform: none;
+		padding-inline: 20px;
+	}
+	.labfocus-home-greeting {
+		font-size: 24px;
+		margin-bottom: 23px;
+	}
+}
+@media (max-height: 600px) {
+	.labfocus-home {
+		transform: none;
+		padding-block: 20px;
+	}
+	.labfocus-home-greeting {
+		font-size: 23px;
+		margin-bottom: 14px;
+	}
+}

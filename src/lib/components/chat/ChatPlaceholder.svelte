@@ -30,6 +30,8 @@
 	export let atSelectedModel;
 
 	export let onSelect = (e) => {};
+	export let redesignedHome = false;
+	export let inputValue = '';
 
 	let mounted = false;
 	let selectedModelIdx = 0;
@@ -66,53 +68,64 @@
 </script>
 
 {#key mounted}
-	<div class="m-auto w-full max-w-[58rem] px-8 lg:px-20 text-center flex flex-col items-center">
-		<img
-			src={ASSISTANT_MARK}
-			alt=""
-			class="mb-4 size-12 rounded-2xl"
-			draggable="false"
-			in:fade={{ duration: 200 }}
-		/>
-		<div class="flex justify-center">
-			<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
-				{#each models as model, modelIdx}
-					<button
-						aria-hidden={models.length <= 1}
-						tabindex={models.length > 1 ? 0 : -1}
-						aria-label={$i18n.t('Get information on {{name}} in the UI', {
-							name: resolveLocalizedModelName(model, $i18n.language)
-						})}
-						on:click={() => {
-							selectedModelIdx = modelIdx;
-						}}
-					>
-						<Tooltip
-							content={DOMPurify.sanitize(
-								marked.parse(
-									sanitizeResponseContent(selectedModelDescription).replaceAll('\n', '<br>')
-								)
-							)}
-							allowHTML={true}
-							placement="right"
+	<div
+		class:labfocus-chat-placeholder={redesignedHome}
+		class="m-auto w-full {redesignedHome
+			? 'max-w-[48rem] px-5'
+			: 'max-w-[58rem] px-8 lg:px-20'} text-center flex flex-col items-center"
+	>
+		{#if redesignedHome}
+			<h1 class="labfocus-home-greeting">{copy.greeting}</h1>
+		{:else}
+			<img
+				src={ASSISTANT_MARK}
+				alt=""
+				class="mb-4 size-12 rounded-2xl"
+				draggable="false"
+				in:fade={{ duration: 200 }}
+			/>
+		{/if}
+		{#if !redesignedHome || models.length > 1}
+			<div class="flex justify-center">
+				<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
+					{#each models as model, modelIdx}
+						<button
+							aria-hidden={models.length <= 1}
+							tabindex={models.length > 1 ? 0 : -1}
+							aria-label={$i18n.t('Get information on {{name}} in the UI', {
+								name: resolveLocalizedModelName(model, $i18n.language)
+							})}
+							on:click={() => {
+								selectedModelIdx = modelIdx;
+							}}
 						>
-							<img
-								src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
-								class=" size-[2.7rem] rounded-full"
-								alt=""
-								draggable="false"
-								on:error={(e) => {
-									// LICENSE covers this Open WebUI fallback logo.
-									// Do not alter, remove, obscure, or replace it except as LICENSE permits:
-									// https://docs.openwebui.com/license.
-									e.currentTarget.src = '/favicon.png';
-								}}
-							/>
-						</Tooltip>
-					</button>
-				{/each}
+							<Tooltip
+								content={DOMPurify.sanitize(
+									marked.parse(
+										sanitizeResponseContent(selectedModelDescription).replaceAll('\n', '<br>')
+									)
+								)}
+								allowHTML={true}
+								placement="right"
+							>
+								<img
+									src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
+									class=" size-[2.7rem] rounded-full"
+									alt=""
+									draggable="false"
+									on:error={(e) => {
+										// LICENSE covers this Open WebUI fallback logo.
+										// Do not alter, remove, obscure, or replace it except as LICENSE permits:
+										// https://docs.openwebui.com/license.
+										e.currentTarget.src = '/favicon.png';
+									}}
+								/>
+							</Tooltip>
+						</button>
+					{/each}
+				</div>
 			</div>
-		</div>
+		{/if}
 
 		{#if $temporary}
 			<Tooltip
@@ -126,58 +139,65 @@
 			</Tooltip>
 		{/if}
 
-		<div
-			class="mt-2 mb-4 text-3xl text-gray-800 dark:text-gray-100 text-center flex flex-col items-center gap-1"
-		>
-			<h2 class="line-clamp-1" in:fade={{ duration: 200 }}>
-				{copy.greeting}
-			</h2>
-			{#if selectedModelName}
-				<div class="text-sm font-normal text-gray-500 dark:text-gray-400 line-clamp-1">
-					{selectedModelName}
-				</div>
-			{/if}
-
-			<div in:fade={{ duration: 200, delay: 200 }}>
-				{#if selectedModelDescription}
-					<div
-						class="mt-0.5 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3 markdown"
-					>
-						{@html DOMPurify.sanitize(
-							marked.parse(
-								sanitizeResponseContent(selectedModelDescription).replaceAll('\n', '<br>')
-							)
-						)}
-					</div>
-					{#if models[selectedModelIdx]?.info?.meta?.user && (!models[selectedModelIdx]?.info?.meta?.user.community || $config?.features.enable_community_sharing)}
-						<div class="mt-0.5 text-sm font-normal text-gray-400 dark:text-gray-500">
-							{$i18n.t('By')}
-							{#if models[selectedModelIdx]?.info?.meta?.user.community}
-								<a
-									href="https://openwebui.com/m/{models[selectedModelIdx]?.info?.meta?.user
-										.username}"
-									>{models[selectedModelIdx]?.info?.meta?.user.name
-										? models[selectedModelIdx]?.info?.meta?.user.name
-										: `@${models[selectedModelIdx]?.info?.meta?.user.username}`}</a
-								>
-							{:else}
-								{models[selectedModelIdx]?.info?.meta?.user.name}
-							{/if}
-						</div>
-					{/if}
-				{:else}
-					<div
-						class="mt-1 text-base font-normal text-gray-400 dark:text-gray-500 line-clamp-1"
-					>
-						{copy.subtitle}
+		{#if !redesignedHome || models.length > 1 || selectedModelDescription}
+			<div
+				class="mt-2 mb-4 text-3xl text-gray-800 dark:text-gray-100 text-center flex flex-col items-center gap-1"
+			>
+				{#if !redesignedHome}
+					<h2 class="line-clamp-1" in:fade={{ duration: 200 }}>
+						{copy.greeting}
+					</h2>
+				{/if}
+				{#if selectedModelName}
+					<div class="text-sm font-normal text-gray-500 dark:text-gray-400 line-clamp-1">
+						{selectedModelName}
 					</div>
 				{/if}
-			</div>
-		</div>
 
-		<div class="w-full dsh-suggestions" in:fade={{ duration: 200, delay: 300 }}>
+				<div in:fade={{ duration: 200, delay: 200 }}>
+					{#if selectedModelDescription}
+						<div
+							class="mt-0.5 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3 markdown"
+						>
+							{@html DOMPurify.sanitize(
+								marked.parse(
+									sanitizeResponseContent(selectedModelDescription).replaceAll('\n', '<br>')
+								)
+							)}
+						</div>
+						{#if models[selectedModelIdx]?.info?.meta?.user && (!models[selectedModelIdx]?.info?.meta?.user.community || $config?.features.enable_community_sharing)}
+							<div class="mt-0.5 text-sm font-normal text-gray-400 dark:text-gray-500">
+								{$i18n.t('By')}
+								{#if models[selectedModelIdx]?.info?.meta?.user.community}
+									<a
+										href="https://openwebui.com/m/{models[selectedModelIdx]?.info?.meta?.user
+											.username}"
+										>{models[selectedModelIdx]?.info?.meta?.user.name
+											? models[selectedModelIdx]?.info?.meta?.user.name
+											: `@${models[selectedModelIdx]?.info?.meta?.user.username}`}</a
+									>
+								{:else}
+									{models[selectedModelIdx]?.info?.meta?.user.name}
+								{/if}
+							</div>
+						{/if}
+					{:else}
+						<div class="mt-1 text-base font-normal text-gray-400 dark:text-gray-500 line-clamp-1">
+							{copy.subtitle}
+						</div>
+					{/if}
+				</div>
+			</div>
+		{/if}
+
+		<div
+			class="w-full {redesignedHome ? '' : 'dsh-suggestions'}"
+			in:fade={{ duration: 200, delay: 300 }}
+		>
 			<Suggestions
-				className="grid grid-cols-2"
+				className={redesignedHome ? '' : 'grid grid-cols-2'}
+				compact={redesignedHome}
+				{inputValue}
 				suggestionPrompts={selectedSuggestionPrompts}
 				{onSelect}
 			/>

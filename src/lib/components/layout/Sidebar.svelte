@@ -82,6 +82,8 @@
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
 
 	import InboxButton from './InboxButton.svelte';
+	import SiteBrand from './SiteBrand.svelte';
+	import { SITE_MARK, usesDefaultProfileImage } from '$lib/theme/brand';
 	import InboxHost from './InboxHost.svelte';
 	import InboxPanel from './InboxPanel.svelte';
 	let inboxHost: InboxHost;
@@ -1230,7 +1232,7 @@
 							Do not alter, remove, obscure, or replace it except as LICENSE permits:
 							https://docs.openwebui.com/license. -->
 								<img
-									src="{WEBUI_BASE_URL}/static/favicon.png"
+									src={`${WEBUI_BASE_URL}${SITE_MARK}`}
 									class="sidebar-new-chat-icon size-5 rounded-full group-hover:hidden"
 									alt=""
 								/>
@@ -1347,7 +1349,9 @@
 										class="self-center relative flex size-[calc(30px*var(--app-text-scale,1))] items-center justify-center rounded-lg transition group-hover:bg-gray-100 dark:group-hover:bg-gray-900"
 									>
 										<img
-											src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
+											src={usesDefaultProfileImage($user?.profile_image_url, $user?.id)
+											? `${WEBUI_BASE_URL}${SITE_MARK}`
+											: `${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
 											class="size-5.5 object-cover rounded-full"
 											alt={$i18n.t('Open User Profile Menu')}
 											aria-label={$i18n.t('Open User Profile Menu')}
@@ -1418,7 +1422,7 @@
 					https://docs.openwebui.com/license. -->
 						<img
 							crossorigin="anonymous"
-							src="{WEBUI_BASE_URL}/static/favicon.png"
+							src={`${WEBUI_BASE_URL}${SITE_MARK}`}
 							class="sidebar-new-chat-icon size-5 rounded-full"
 							alt=""
 						/>
@@ -1432,7 +1436,7 @@
 							id="sidebar-webui-name"
 							class=" self-center truncate font-normal text-gray-700 dark:text-gray-200"
 						>
-							{$WEBUI_NAME}
+							<SiteBrand />
 						</div>
 					</a>
 					<div class="flex shrink-0 items-center gap-px">
@@ -2085,7 +2089,9 @@
 								>
 									<div class=" self-center mr-3 relative flex-shrink-0">
 										<img
-											src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
+											src={usesDefaultProfileImage($user?.profile_image_url, $user?.id)
+											? `${WEBUI_BASE_URL}${SITE_MARK}`
+											: `${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
 											class="size-5.5 object-cover rounded-full"
 											alt={$i18n.t('Open User Profile Menu')}
 											aria-label={$i18n.t('Open User Profile Menu')}

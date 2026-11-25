@@ -164,6 +164,7 @@
 	import DeleteConfirmDialog from '../common/ConfirmDialog.svelte';
 	import WebSearchConfirmDialog from '../common/ConfirmDialog.svelte';
 	import Placeholder from './Placeholder.svelte';
+	import FishCompanion from './FishCompanion.svelte';
 	import FilesOverlay from './MessageInput/FilesOverlay.svelte';
 	import NotificationToast from '../NotificationToast.svelte';
 	import Spinner from '../common/Spinner.svelte';
@@ -6224,6 +6225,7 @@
 							>
 								<div class=" h-full w-full flex flex-col">
 									<Messages
+										redesignedHome={!embedded && !isShared && !branchPointMessageId}
 										{messagesContainerId}
 										{branchPointMessageId}
 										bind:this={messagesRef}
@@ -6278,6 +6280,7 @@
 								<div
 									id={embedded ? messageInputDropzoneId : undefined}
 									class=" pb-2 {dragged ? 'z-0' : 'z-10'}"
+									class:labfocus-chat-composer={!embedded && !isShared && !branchPointMessageId && Object.keys(history?.messages ?? {}).length === 0}
 								>
 									<MessageInput
 										{selectedTerminalId}
@@ -6484,6 +6487,7 @@
 									: 'items-center'}"
 							>
 								<Placeholder
+									redesignedHome={!embedded && !isShared}
 									bind:folderTabActions
 									{selectedTerminalId}
 									{terminalSkills}
@@ -6549,6 +6553,14 @@
 							</div>
 						{/if}
 					</div>
+					{#if !embedded && !isShared && !$selectedFolder && !contextOnly}
+						<FishCompanion
+							busy={streaming}
+							{prompt}
+							responseComplete={history.messages[history.currentId ?? '']?.role === 'assistant' && history.messages[history.currentId ?? '']?.done && !history.messages[history.currentId ?? '']?.error}
+							active={!dragged && !(bridge?.connected || bridge?.connecting) && !($mobile && !!history.currentId) && !(fullWidthTabs && !mainChatActive)}
+						/>
+					{/if}
 				{/if}
 			</div>
 
